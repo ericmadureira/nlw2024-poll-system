@@ -28,6 +28,23 @@ export async function votePoll(app: FastifyInstance) {
       })
     }
 
+    const previousVote = await prisma.vote.findUnique({
+      where: {
+        sessionId_pollId: {
+          pollId,
+          sessionId
+        }
+      }
+    })
+
+    if(previousVote){
+      await prisma.vote.delete({
+        where: {
+          id: previousVote.id
+        }
+      })
+    }
+
     await prisma.vote.create({
       data: {
         pollId,
