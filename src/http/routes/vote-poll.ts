@@ -38,7 +38,7 @@ export async function votePoll(app: FastifyInstance) {
       }
     })
 
-    if(previousVote){
+    if(previousVote && (pollOptionId !== previousVote.pollOptionId)) {
       await prisma.vote.delete({
         where: {
           id: previousVote.id
